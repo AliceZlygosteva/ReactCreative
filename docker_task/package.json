@@ -1,0 +1,14 @@
+{
+  "name": "ReactCreative",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:AliceZlygosteva/ReactCreative.git",
+  "author": "Alice Zlygosteva <a.zlygosteva98@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "4.17.2"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}
