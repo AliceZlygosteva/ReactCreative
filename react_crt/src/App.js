@@ -1,15 +1,15 @@
 import React from "react";
 
-import Header from './components/Header';
-import SwitchContainer from './containers/SwitchContainer';
+import HeaderToDo from "./components/HeaderToDo";
+import ToDoContainer from "./containers/ToDoContainer";
 
-import './App.scss';
+import "./App.scss";
 
 function App() {
   return (
     <div>
-      <Header />
-      <SwitchContainer />
+      <HeaderToDo />
+      <ToDoContainer />
     </div>
   );
 }

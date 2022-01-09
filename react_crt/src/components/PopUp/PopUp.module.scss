@@ -1,0 +1,45 @@
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 400px;
+  background-color: #013220;
+  padding: 20px 30px;
+  border: 5px solid #9e4f24;
+  border-radius: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out;
+
+  &.is-opened {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.modalTitle {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 34px;
+  color: #c0b2b5;
+  margin-bottom: 25px;
+}
+
+.modalInput {
+  margin-bottom: 25px;
+}
+
+.modalSelect {
+  margin-bottom: 25px;
+}
+
+.modalButton {
+  margin-bottom: 25px;
+}
+
+.buttonMargin {
+  margin: 0 20px 0 20px;
+}
