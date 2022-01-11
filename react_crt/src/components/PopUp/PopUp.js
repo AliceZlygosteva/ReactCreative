@@ -8,7 +8,7 @@ import styles from "./PopUp.module.scss";
 class PopUp extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { description: "", priority: 0 };
+    this.state = { description: "", priority: "common" };
 
     this.handleChangeDescription = this.handleChangeDescription.bind(this);
     this.handleChangePriority = this.handleChangePriority.bind(this);
@@ -31,7 +31,7 @@ class PopUp extends React.Component {
     handleClose();
     this.setState({
       description: "",
-      priority: 0,
+      priority: "common",
     })
   }
 
@@ -57,9 +57,9 @@ class PopUp extends React.Component {
         </div>
         <div className={styles.modalSelect}>
           <select size="1" value={priority} onChange={this.handleChangePriority}>
-            <option value="0">Обычная</option>
-            <option value="1">Важная</option>
-            <option value="2">Срочная</option>
+            <option value="common">Обычная</option>
+            <option value="important">Важная</option>
+            <option value="hot">Срочная</option>
           </select>
         </div>
         <div className={styles.modalButton}>

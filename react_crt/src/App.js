@@ -1,6 +1,6 @@
 import React from "react";
 
-import HeaderToDo from "./components/HeaderToDo";
+import Header from "./components/Header";
 import ToDoContainer from "./containers/ToDoContainer";
 
 import "./App.scss";
@@ -8,7 +8,8 @@ import "./App.scss";
 function App() {
   return (
     <div>
-      <HeaderToDo />
+      <Header />
+      <h2 className="title">TO-DO LIST</h2>
       <ToDoContainer />
     </div>
   );

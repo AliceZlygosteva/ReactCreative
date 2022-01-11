@@ -1,7 +1,15 @@
 import React from "react";
+import cn from "classnames";
+
 import Button from "../UI/Button";
 
 import styles from "./ItemToDo.module.scss";
+
+const TASKS_TYPE = {
+  common: "Обычная",
+  important: "Важная",
+  hot: "Срочная"
+}
 
 class ItemToDo extends React.Component {
   render() {
@@ -12,24 +20,27 @@ class ItemToDo extends React.Component {
     } = this.props;
 
     return (
-      <div className={styles.item}>
-        <div>
-          <input
-            type="checkbox"
-            checked={isCompleted}
-            onChange={() => changeStatus(!isCompleted, id)}
-          ></input>
+      <div className={cn(styles.itemContainer, styles[priority])}>
+        <div className={styles.item}>
+          <label className={styles.checkbox}>
+            <input
+              type="checkbox"
+              checked={isCompleted}
+              onChange={() => changeStatus(!isCompleted, id)}
+            ></input>
+            <div className={styles.checkboxIndicator}></div>
+          </label>
           <span>{description}</span>
+          <div className={styles.priority}>{TASKS_TYPE[priority]}</div>
+          <Button
+            theme="delete"
+            color="red"
+            size="s"
+            onClick={() => deleteItem(id)}
+          >
+            Delete
+          </Button>
         </div>
-        <div className={styles.itemPriority}>{priority}</div>
-        <Button
-          theme="delete"
-          color="red"
-          size="s"
-          onClick={() => deleteItem(id)}
-        >
-          Delete
-        </Button>
       </div>
     );
   }
