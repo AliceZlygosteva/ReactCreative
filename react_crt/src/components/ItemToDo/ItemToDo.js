@@ -3,13 +3,10 @@ import cn from "classnames";
 
 import Button from "../UI/Button";
 
+import { TASKS_TYPE } from "./store";
+
 import styles from "./ItemToDo.module.scss";
 
-const TASKS_TYPE = {
-  common: "Обычная",
-  important: "Важная",
-  hot: "Срочная"
-}
 
 class ItemToDo extends React.Component {
   render() {

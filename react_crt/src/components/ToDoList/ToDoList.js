@@ -8,7 +8,7 @@ class ToDoList extends React.Component {
   filteringTasks(filterType, arrTasks) {
     switch (filterType) {
       case "done":
-        return arrTasks.filter((task) => !!task.isCompleted);
+        return arrTasks.filter((task) => task.isCompleted);
 
       case "current":
         return arrTasks.filter((task) => !task.isCompleted);
@@ -19,7 +19,7 @@ class ToDoList extends React.Component {
   }
   
   render() {
-    const { list, filter, addItem, changeStatus, deleteItem } = this.props;
+    const { list, filter } = this.props;
     const filteredList = this.filteringTasks(filter, list);
 
     return (
@@ -27,11 +27,9 @@ class ToDoList extends React.Component {
         {filteredList?.map(item => (
           <ItemToDo
             item={item}
-            addItem={addItem}
-            changeStatus={changeStatus}
-            deleteItem={deleteItem}
             key={item.id}
-          ></ItemToDo>
+            {...this.props}
+          />
         ))}
       </div>
     );
