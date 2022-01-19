@@ -1,0 +1,60 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.select {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 15px;
+  width: 100%;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+
+  select {
+    display: inline-block;
+    width: 100%;
+    padding: 10px 15px;
+    outline: 0;
+    border: 0;
+    border-radius: 0;
+    background: #e6e6e6;
+    color: #013220;
+    appearance: none;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      color: #000;
+      background: #ccc;
+
+      & ~ .selectArrow {
+        border-top-color: #000;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+
+      & ~ .selectArrow {
+        border-top-color: #ccc;
+      }
+    }
+  }
+}
+
+.selectArrow {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  border-style: solid;
+  border-width: 8px 5px 0 5px;
+  border-color: #013220 transparent transparent transparent;
+}
