@@ -17,10 +17,10 @@ class ToDoContainer extends React.Component {
       filter: "all",
     };
 
-    this.addItem = this.addItem.bind(this);
     this.changeStatus = this.changeStatus.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
     this.handleChangeFilter = this.handleChangeFilter.bind(this);
+    this.handleAddItem = this.handleAddItem.bind(this);
   }
 
   componentDidMount() {
@@ -34,8 +34,8 @@ class ToDoContainer extends React.Component {
     localStorage.setItem("todoList", JSON.stringify(newList));
   }
 
-  addItem(description, priority) {
-    const { list } = this.state;
+  createNewItem(prevState, description, priority) {
+    const { list } = prevState;
 
     const hasMatchDescription = list.some(
       (item) => item.description === description
@@ -43,12 +43,10 @@ class ToDoContainer extends React.Component {
 
     if (hasMatchDescription) return alert("Задача уже существует");
 
-    const newList = [
+    return [
       ...list,
       { id: uuidv4(), description, priority, isCompleted: false },
     ];
-
-    this.saveList(newList);
   }
 
   changeStatus(status, id) {
@@ -71,6 +69,16 @@ class ToDoContainer extends React.Component {
 
   handleChangeFilter(event) {
     this.setState({ filter: event.target.value });
+  }
+
+  handleAddItem(description, priority) {
+    this.setState((prevState) => {
+      const newToDo = this.createNewItem(prevState, description, priority);
+
+      localStorage.setItem("todoList", JSON.stringify(newToDo));
+
+      return { list: newToDo };
+    });
   }
 
   render() {
@@ -103,7 +111,7 @@ class ToDoContainer extends React.Component {
         <PopUp
           isShow={isShow}
           handleClose={() => this.setState({ isShow: false })}
-          addItem={this.addItem}
+          addItem={this.handleAddItem}
         />
       </div>
     );
