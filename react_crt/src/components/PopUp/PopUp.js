@@ -3,6 +3,8 @@ import cn from "classnames";
 
 import Button from "../UI/Button";
 
+import { ThemeContext } from "../../context/index";
+
 import styles from "./PopUp.module.scss";
 
 class PopUp extends React.Component {
@@ -38,11 +40,13 @@ class PopUp extends React.Component {
   render() {
     const { className, isShow, handleClose } = this.props;
     const { description, priority } = this.state;
+    const { theme } = this.context;
 
     return (
       <div
         className={cn(styles.modal, className, {
           [styles["is-opened"]]: isShow,
+          [styles[`modal--${theme}`]]: theme,
         })}
       >
         <div className={styles.modalTitle}>Create a new todo</div>
@@ -65,7 +69,6 @@ class PopUp extends React.Component {
         <div className={styles.modalButton}>
           <Button
             className={styles.buttonMargin}
-            theme="default"
             color="white"
             size="m"
             onClick={() => handleClose()}
@@ -74,7 +77,6 @@ class PopUp extends React.Component {
           </Button>
           <Button
             className={styles.buttonMargin}
-            theme="default"
             color="green"
             size="m"
             onClick={this.createToDo}
@@ -84,7 +86,9 @@ class PopUp extends React.Component {
         </div>
       </div>
     );
-  }
-}
+  };
+};
+
+PopUp.contextType = ThemeContext;
 
 export default PopUp;

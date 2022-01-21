@@ -86,33 +86,32 @@ class ToDoContainer extends React.Component {
 
     return (
       <div className={styles.container}>
-        <div className={styles.select}>
-          <select size="1" value={filter} onChange={this.handleChangeFilter}>
-            <option value="all">Все задачи</option>
-            <option value="done">Выполненные</option>
-            <option value="current">Текущие</option>
-          </select>
-          <div className={styles.selectArrow}></div>
-        </div>
-        <ToDoList
-          list={list}
-          filter={filter}
-          changeStatus={this.changeStatus}
-          deleteItem={this.deleteItem}
-        ></ToDoList>
-        <Button
-          theme="default"
-          color="green"
-          size="lg"
-          onClick={() => this.setState({ isShow: true })}
-        >
-          Add a new todo
-        </Button>
-        <PopUp
-          isShow={isShow}
-          handleClose={() => this.setState({ isShow: false })}
-          addItem={this.handleAddItem}
-        />
+          <div className={styles.select}>
+            <select size="1" value={filter} onChange={this.handleChangeFilter}>
+              <option value="all">Все задачи</option>
+              <option value="done">Выполненные</option>
+              <option value="current">Текущие</option>
+            </select>
+            <div className={styles.selectArrow}></div>
+          </div>
+          <ToDoList
+            list={list}
+            filter={filter}
+            changeStatus={this.changeStatus}
+            deleteItem={this.deleteItem}
+          ></ToDoList>
+          <Button
+            color="green"
+            size="lg"
+            onClick={() => this.setState({ isShow: true })}
+          >
+            Add a new todo
+          </Button>
+          <PopUp
+            isShow={isShow}
+            handleClose={() => this.setState({ isShow: false })}
+            addItem={this.handleAddItem}
+          />
       </div>
     );
   }
