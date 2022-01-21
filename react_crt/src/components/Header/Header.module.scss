@@ -1,12 +1,28 @@
 .header {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   height: 100px;
   background-color: #013220;
   padding: 25px;
   margin-bottom: 50px;
+
+  &--light {
+    background-color: #f7e4e8;
+
+    .headerTitle {
+      color: #013220;
+    }
+  }
+
+  &--dark {
+    background-color: #013220;
+
+    .headerTitle {
+      color: #c0b2b5;
+    }
+  }
 
   h2 {
     font-size: 36px;

@@ -19,6 +19,22 @@
     opacity: 1;
     visibility: visible;
   }
+
+  &--light {
+    background-color: #f7e4e8;
+
+    .modalTitle {
+      color: #013220;
+    }
+  }
+
+  &--dark {
+    background-color: #013220;
+
+    .modalTitle {
+      color: #c0b2b5;
+    }
+  }
 }
 
 .modalTitle {

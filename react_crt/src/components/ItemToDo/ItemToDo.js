@@ -30,7 +30,7 @@ class ItemToDo extends React.Component {
           <span>{description}</span>
           <div className={styles.priority}>{TASKS_TYPE[priority]}</div>
           <Button
-            theme="delete"
+            buttonType="delete"
             color="red"
             size="s"
             onClick={() => deleteItem(id)}

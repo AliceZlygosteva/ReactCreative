@@ -4,7 +4,7 @@
   outline: 0;
   background: transparent;
 
-  &--theme {
+  &--button-type {
     &-default {
       padding: 6px 10px;
       border: 3px solid #c0b2b5;
@@ -19,6 +19,14 @@
       border-radius: 10px;
       font-family: 'Times New Roman', Times, serif;
       font-size: 20px;
+    }
+
+    &-switch {
+      padding: 6px 10px;
+      border: 3px solid #000;
+      border-radius: 10px;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 28px;
     }
   }
 
@@ -47,6 +55,11 @@
       background-color: #a10115;
       color: #fff;
     }
+
+    &-grey {
+      background-color: #fff;
+      color:#013220;
+    }
   }
 
   &--size {
@@ -65,5 +78,17 @@
 
   &--full-width {
     width: 100%;
+  }
+
+  &--theme {
+    &-light {
+      color: #000;
+      background-color: #fff;
+    }
+
+    &-dark {
+      color: #fff;
+      background-color: #000;
+    }
   }
 }
