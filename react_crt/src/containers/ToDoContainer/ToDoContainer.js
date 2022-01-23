@@ -1,9 +1,10 @@
 import React from "react";
-import { v4 as uuidv4 } from "uuid";
 
 import PopUp from "../../components/PopUp";
 import Button from "../../components/UI/Button";
 import ToDoList from "../../components/ToDoList";
+
+import withLoader from "../../components/HOC/withLoader";
 
 import styles from "./ToDoContainer.module.scss";
 
@@ -15,6 +16,7 @@ class ToDoContainer extends React.Component {
       list: [],
       isShow: false,
       filter: "all",
+      isLoading: true,
     };
 
     this.changeStatus = this.changeStatus.bind(this);
@@ -26,7 +28,10 @@ class ToDoContainer extends React.Component {
   componentDidMount() {
     const listFromStorage = JSON.parse(localStorage.getItem("todoList")) || [];
 
-    this.setState({ list: listFromStorage });
+    setTimeout(
+      () => this.setState({ list: listFromStorage, isLoading: false }),
+      2000
+    );
   }
 
   saveList(newList) {
@@ -34,7 +39,7 @@ class ToDoContainer extends React.Component {
     localStorage.setItem("todoList", JSON.stringify(newList));
   }
 
-  createNewItem(prevState, description, priority) {
+  createNewItem(prevState, { description, priority, id }) {
     const { list } = prevState;
 
     const hasMatchDescription = list.some(
@@ -43,10 +48,7 @@ class ToDoContainer extends React.Component {
 
     if (hasMatchDescription) return alert("Задача уже существует");
 
-    return [
-      ...list,
-      { id: uuidv4(), description, priority, isCompleted: false },
-    ];
+    return [...list, { id, description, priority, isCompleted: false }];
   }
 
   changeStatus(status, id) {
@@ -71,9 +73,13 @@ class ToDoContainer extends React.Component {
     this.setState({ filter: event.target.value });
   }
 
-  handleAddItem(description, priority) {
+  handleAddItem({ description, priority, id }) {
     this.setState((prevState) => {
-      const newToDo = this.createNewItem(prevState, description, priority);
+      const newToDo = this.createNewItem(prevState, {
+        description,
+        priority,
+        id,
+      });
 
       localStorage.setItem("todoList", JSON.stringify(newToDo));
 
@@ -82,36 +88,42 @@ class ToDoContainer extends React.Component {
   }
 
   render() {
-    const { isShow, list, filter } = this.state;
+    const { isLoading, isShow, list, filter } = this.state;
+
+    const ListWithLoader = withLoader(
+      ToDoList,
+      {
+        list,
+        filter,
+        changeStatus: this.changeStatus,
+        deleteItem: this.deleteItem,
+      },
+      isLoading
+    );
 
     return (
       <div className={styles.container}>
-          <div className={styles.select}>
-            <select size="1" value={filter} onChange={this.handleChangeFilter}>
-              <option value="all">Все задачи</option>
-              <option value="done">Выполненные</option>
-              <option value="current">Текущие</option>
-            </select>
-            <div className={styles.selectArrow}></div>
-          </div>
-          <ToDoList
-            list={list}
-            filter={filter}
-            changeStatus={this.changeStatus}
-            deleteItem={this.deleteItem}
-          ></ToDoList>
-          <Button
-            color="green"
-            size="lg"
-            onClick={() => this.setState({ isShow: true })}
-          >
-            Add a new todo
-          </Button>
-          <PopUp
-            isShow={isShow}
-            handleClose={() => this.setState({ isShow: false })}
-            addItem={this.handleAddItem}
-          />
+        <div className={styles.select}>
+          <select size="1" value={filter} onChange={this.handleChangeFilter}>
+            <option value="all">Все задачи</option>
+            <option value="done">Выполненные</option>
+            <option value="current">Текущие</option>
+          </select>
+          <div className={styles.selectArrow}></div>
+        </div>
+        <ListWithLoader />
+        <Button
+          color="green"
+          size="lg"
+          onClick={() => this.setState({ isShow: true })}
+        >
+          Add a new todo
+        </Button>
+        <PopUp
+          isShow={isShow}
+          handleClose={() => this.setState({ isShow: false })}
+          addItem={this.handleAddItem}
+        />
       </div>
     );
   }
