@@ -1,6 +1,7 @@
 import React from "react";
 import cn from "classnames";
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
 
 import Button from "../UI/Button";
 
@@ -105,5 +106,10 @@ class PopUp extends React.Component {
 };
 
 PopUp.contextType = ThemeContext;
+
+PopUp.propTypes = {
+  className: PropTypes.string,
+  isShow: PropTypes.bool,
+};
 
 export default PopUp;
