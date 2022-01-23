@@ -1,5 +1,6 @@
 import React from "react";
 import cn from "classnames";
+import { v4 as uuidv4 } from "uuid";
 
 import Button from "../UI/Button";
 
@@ -15,6 +16,7 @@ class PopUp extends React.Component {
     this.handleChangeDescription = this.handleChangeDescription.bind(this);
     this.handleChangePriority = this.handleChangePriority.bind(this);
     this.createToDo = this.createToDo.bind(this);
+    this.handleClosePopup = this.handleClosePopup.bind(this);
   }
 
   handleChangeDescription(event) {
@@ -25,11 +27,24 @@ class PopUp extends React.Component {
     this.setState({ priority: event.target.value });
   }
 
+  handleClosePopup() {
+    const { handleClose } = this.props;
+
+    this.setState({
+      description: "",
+      priority: "common",
+    });
+
+    handleClose();
+  }
+
   createToDo() {
     const { addItem, handleClose } = this.props;
     const { description, priority } = this.state;
 
-    addItem(description, priority);
+    if (!description) return;
+    
+    addItem({ description, priority, id: uuidv4() });
     handleClose();
     this.setState({
       description: "",
@@ -38,7 +53,7 @@ class PopUp extends React.Component {
   }
 
   render() {
-    const { className, isShow, handleClose } = this.props;
+    const { className, isShow } = this.props;
     const { description, priority } = this.state;
     const { theme } = this.context;
 
@@ -71,7 +86,7 @@ class PopUp extends React.Component {
             className={styles.buttonMargin}
             color="white"
             size="m"
-            onClick={() => handleClose()}
+            onClick={this.handleClosePopup}
           >
             Back
           </Button>

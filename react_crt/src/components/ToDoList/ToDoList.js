@@ -17,19 +17,15 @@ class ToDoList extends React.Component {
         return arrTasks;
     }
   }
-  
+
   render() {
     const { list, filter } = this.props;
     const filteredList = this.filteringTasks(filter, list);
 
     return (
       <div className={styles.list}>
-        {filteredList?.map(item => (
-          <ItemToDo
-            item={item}
-            key={item.id}
-            {...this.props}
-          />
+        {filteredList?.map((item) => (
+          <ItemToDo item={item} key={item.id} {...this.props} />
         ))}
       </div>
     );
