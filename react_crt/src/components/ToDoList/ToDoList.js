@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import ItemToDo from "../ItemToDo/ItemToDo";
 
@@ -31,5 +32,10 @@ class ToDoList extends React.Component {
     );
   }
 }
+
+ToDoList.propTypes = {
+  filter: PropTypes.string,
+  list: PropTypes.array
+};
 
 export default ToDoList;

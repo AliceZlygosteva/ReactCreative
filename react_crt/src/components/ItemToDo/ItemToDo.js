@@ -1,12 +1,12 @@
 import React from "react";
 import cn from "classnames";
+import PropTypes from "prop-types";
 
 import Button from "../UI/Button";
 
 import { TASKS_TYPE } from "./store";
 
 import styles from "./ItemToDo.module.scss";
-
 
 class ItemToDo extends React.Component {
   render() {
@@ -42,5 +42,11 @@ class ItemToDo extends React.Component {
     );
   }
 }
+
+ItemToDo.propTypes = {
+  changeStatus: PropTypes.func,
+  deleteItem: PropTypes.func,
+  item: PropTypes.object
+};
 
 export default ItemToDo;

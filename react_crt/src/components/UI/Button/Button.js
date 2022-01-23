@@ -1,5 +1,6 @@
 import React from "react";
 import cn from "classnames";
+import PropTypes from 'prop-types';
 
 import {
   BUTTON_TYPES,
@@ -39,6 +40,18 @@ class Button extends React.Component {
       </button>
     );
   };
+};
+
+Button.propTypes = {
+  buttonType: PropTypes.oneOf(BUTTON_TYPES),
+  children: PropTypes.node,
+  className: PropTypes.string,
+  color: PropTypes.oneOf(BUTTON_COLOR),
+  fullWidth: PropTypes.bool,
+  onClick: PropTypes.func,
+  size: PropTypes.oneOf(BUTTON_SIZES),
+  theme: PropTypes.oneOf(BUTTON_THEMES),
+  type: PropTypes.string
 };
 
 export default Button;
