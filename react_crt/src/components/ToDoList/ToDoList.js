@@ -5,8 +5,10 @@ import ItemToDo from "../ItemToDo/ItemToDo";
 
 import styles from "./ToDoList.module.scss";
 
-class ToDoList extends React.Component {
-  filteringTasks(filterType, arrTasks) {
+const ToDoList = (props) => {
+  const { filter, list } = props;
+  
+  const filteringTasks = (filterType, arrTasks) => {
     switch (filterType) {
       case "done":
         return arrTasks.filter((task) => task.isCompleted);
@@ -17,25 +19,22 @@ class ToDoList extends React.Component {
       default:
         return arrTasks;
     }
-  }
+  };
 
-  render() {
-    const { list, filter } = this.props;
-    const filteredList = this.filteringTasks(filter, list);
+  const filteredList = filteringTasks(filter, list);
 
-    return (
-      <div className={styles.list}>
-        {filteredList?.map((item) => (
-          <ItemToDo item={item} key={item.id} {...this.props} />
-        ))}
-      </div>
-    );
-  }
-}
+  return (
+    <div className={styles.list}>
+      {filteredList?.map((item) => (
+        <ItemToDo item={item} key={item.id} {...props} />
+      ))}
+    </div>
+  );
+};
 
 ToDoList.propTypes = {
   filter: PropTypes.string,
-  list: PropTypes.array
+  list: PropTypes.array,
 };
 
 export default ToDoList;

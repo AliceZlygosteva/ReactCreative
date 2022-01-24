@@ -1,6 +1,6 @@
 import React from "react";
 import cn from "classnames";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 import {
   BUTTON_TYPES,
@@ -11,35 +11,31 @@ import {
 
 import styles from "./Button.module.scss";
 
-class Button extends React.Component {
-  render() {
-    const {
-      children,
-      className,
-      color,
-      onClick,
-      size = "m",
-      buttonType = "default",
-      type = "button",
-      fullWidth,
-      theme,
-    } = this.props;
+const Button = ({
+  children,
+  className,
+  color,
+  onClick,
+  size = "m",
+  buttonType = "default",
+  type = "button",
+  fullWidth,
+  theme,
+}) => {
+  const classNames = cn(styles.button, className, {
+    [styles[`button--color-${color}`]]: BUTTON_COLOR.includes(color),
+    [styles[`button--button-type-${buttonType}`]]:
+      BUTTON_TYPES.includes(buttonType),
+    [styles[`button--size-${size}`]]: BUTTON_SIZES.includes(size),
+    [styles[`button--full-width`]]: fullWidth,
+    [styles[`button-theme-${theme}`]]: BUTTON_THEMES.includes(theme),
+  });
 
-    const classNames = cn(styles.button, className, {
-      [styles[`button--color-${color}`]]: BUTTON_COLOR.includes(color),
-      [styles[`button--button-type-${buttonType}`]]:
-        BUTTON_TYPES.includes(buttonType),
-      [styles[`button--size-${size}`]]: BUTTON_SIZES.includes(size),
-      [styles[`button--full-width`]]: fullWidth,
-      [styles[`button-theme-${theme}`]]: BUTTON_THEMES.includes(theme),
-    });
-
-    return (
-      <button className={classNames} type={type} onClick={onClick}>
-        {children}
-      </button>
-    );
-  };
+  return (
+    <button className={classNames} type={type} onClick={onClick}>
+      {children}
+    </button>
+  );
 };
 
 Button.propTypes = {
@@ -51,7 +47,7 @@ Button.propTypes = {
   onClick: PropTypes.func,
   size: PropTypes.oneOf(BUTTON_SIZES),
   theme: PropTypes.oneOf(BUTTON_THEMES),
-  type: PropTypes.string
+  type: PropTypes.string,
 };
 
 export default Button;
