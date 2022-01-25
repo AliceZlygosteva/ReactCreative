@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import PopUp from "../../components/PopUp";
 import Button from "../../components/UI/Button";
@@ -6,76 +6,69 @@ import ToDoList from "../../components/ToDoList";
 
 import withLoader from "../../components/HOC/withLoader";
 
+import { FILTER_TYPES } from "../../constants";
+
 import styles from "./ToDoContainer.module.scss";
 
-class ToDoContainer extends React.Component {
-  constructor(props) {
-    super(props);
+const ListWithLoader = withLoader(ToDoList);
 
-    this.state = {
-      list: [],
-      isShow: false,
-      filter: "all",
-      isLoading: true,
-    };
+const ToDoContainer = () => {
+  const [list, setList] = useState([]);
+  const [filter, setFilter] = useState(FILTER_TYPES.all);
+  const [isShow, setIsShow] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-    this.changeStatus = this.changeStatus.bind(this);
-    this.deleteItem = this.deleteItem.bind(this);
-    this.handleChangeFilter = this.handleChangeFilter.bind(this);
-    this.handleAddItem = this.handleAddItem.bind(this);
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     const listFromStorage = JSON.parse(localStorage.getItem("todoList")) || [];
 
-    setTimeout(
-      () => this.setState({ list: listFromStorage, isLoading: false }),
-      2000
-    );
-  }
+    const getListTimeout = setTimeout(() => {
+      setList(listFromStorage);
+      setIsLoading(false);
+    }, 2000);
 
-  saveList(newList) {
-    this.setState({ list: newList });
+    return () => clearTimeout(getListTimeout);
+  }, []);
+
+  const saveList = (newList) => {
+    setList(newList);
     localStorage.setItem("todoList", JSON.stringify(newList));
-  }
+  };
 
-  createNewItem(prevState, { description, priority, id }) {
-    const { list } = prevState;
-
-    const hasMatchDescription = list.some(
+  const createNewItem = (prevList, { description, priority, id }) => {
+    const hasMatchDescription = prevList.some(
       (item) => item.description === description
     );
 
     if (hasMatchDescription) return alert("Задача уже существует");
 
     return [...list, { id, description, priority, isCompleted: false }];
-  }
+  };
 
-  changeStatus(status, id) {
-    const { list } = this.state;
+  const changeStatus = useCallback(
+    (status, id) => {
+      const newList = list.map((item) =>
+        item.id === id ? { ...item, isCompleted: status } : item
+      );
 
-    const newList = list.map((item) =>
-      item.id === id ? { ...item, isCompleted: status } : item
-    );
+      saveList(newList);
+    },
+    [list]
+  );
 
-    this.saveList(newList);
-  }
+  const deleteItem = useCallback(
+    (id) => {
+      const newList = list.filter((item) => item.id !== id);
 
-  deleteItem(id) {
-    const { list } = this.state;
+      saveList(newList);
+    },
+    [list]
+  );
 
-    const newList = list.filter((item) => item.id !== id);
+  const handleChangeFilter = (event) => setFilter(event.target.value);
 
-    this.saveList(newList);
-  }
-
-  handleChangeFilter(event) {
-    this.setState({ filter: event.target.value });
-  }
-
-  handleAddItem({ description, priority, id }) {
-    this.setState((prevState) => {
-      const newToDo = this.createNewItem(prevState, {
+  const handleAddItem = ({ description, priority, id }) => {
+    setList((prevList) => {
+      const newToDo = createNewItem(prevList, {
         description,
         priority,
         id,
@@ -83,50 +76,41 @@ class ToDoContainer extends React.Component {
 
       localStorage.setItem("todoList", JSON.stringify(newToDo));
 
-      return { list: newToDo };
+      return newToDo;
     });
-  }
+  };
 
-  render() {
-    const { isLoading, isShow, list, filter } = this.state;
-
-    const ListWithLoader = withLoader(
-      ToDoList,
-      {
-        list,
-        filter,
-        changeStatus: this.changeStatus,
-        deleteItem: this.deleteItem,
-      },
-      isLoading
-    );
-
-    return (
-      <div className={styles.container}>
-        <div className={styles.select}>
-          <select size="1" value={filter} onChange={this.handleChangeFilter}>
-            <option value="all">Все задачи</option>
-            <option value="done">Выполненные</option>
-            <option value="current">Текущие</option>
-          </select>
-          <div className={styles.selectArrow}></div>
-        </div>
-        <ListWithLoader />
-        <Button
-          color="green"
-          size="lg"
-          onClick={() => this.setState({ isShow: true })}
+  return (
+    <div className={styles.container}>
+      <div className={styles.select}>
+        <select
+          size="1"
+          value={filter}
+          onChange={(event) => handleChangeFilter(event)}
         >
-          Add a new todo
-        </Button>
-        <PopUp
-          isShow={isShow}
-          handleClose={() => this.setState({ isShow: false })}
-          addItem={this.handleAddItem}
-        />
+          <option value={FILTER_TYPES.all}>Все задачи</option>
+          <option value={FILTER_TYPES.done}>Выполненные</option>
+          <option value={FILTER_TYPES.current}>Текущие</option>
+        </select>
+        <div className={styles.selectArrow}></div>
       </div>
-    );
-  }
-}
+      <ListWithLoader
+        isLoading={isLoading}
+        list={list}
+        filter={filter}
+        changeStatus={changeStatus}
+        deleteItem={deleteItem}
+      />
+      <Button color="green" size="lg" onClick={() => setIsShow(true)}>
+        Add a new todo
+      </Button>
+      <PopUp
+        isShow={isShow}
+        handleClose={() => setIsShow(false)}
+        addItem={handleAddItem}
+      />
+    </div>
+  );
+};
 
 export default ToDoContainer;

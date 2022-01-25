@@ -2,40 +2,40 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import ItemToDo from "../ItemToDo/ItemToDo";
+import { FILTER_TYPES } from "../../constants";
 
 import styles from "./ToDoList.module.scss";
 
-class ToDoList extends React.Component {
-  filteringTasks(filterType, arrTasks) {
+const ToDoList = (props) => {
+  const { filter, list } = props;
+  
+  const filteringTasks = (filterType, arrTasks) => {
     switch (filterType) {
-      case "done":
+      case FILTER_TYPES.done:
         return arrTasks.filter((task) => task.isCompleted);
 
-      case "current":
+      case FILTER_TYPES.current:
         return arrTasks.filter((task) => !task.isCompleted);
 
       default:
         return arrTasks;
     }
-  }
+  };
 
-  render() {
-    const { list, filter } = this.props;
-    const filteredList = this.filteringTasks(filter, list);
+  const filteredList = filteringTasks(filter, list);
 
-    return (
-      <div className={styles.list}>
-        {filteredList?.map((item) => (
-          <ItemToDo item={item} key={item.id} {...this.props} />
-        ))}
-      </div>
-    );
-  }
-}
+  return (
+    <div className={styles.list}>
+      {filteredList?.map((item) => (
+        <ItemToDo item={item} key={item.id} {...props} />
+      ))}
+    </div>
+  );
+};
 
 ToDoList.propTypes = {
   filter: PropTypes.string,
-  list: PropTypes.array
+  list: PropTypes.array,
 };
 
 export default ToDoList;
