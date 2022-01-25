@@ -6,12 +6,13 @@ import PropTypes from "prop-types";
 import Button from "../UI/Button";
 
 import { ThemeContext } from "../../context/index";
+import { TASKS_TYPE } from "../../constants";
 
 import styles from "./PopUp.module.scss";
 
 const PopUp = ({ addItem, className, handleClose, isShow }) => {
   const [description, setDescription] = useState("");
-  const [priority, setPriority] = useState("common");
+  const [priority, setPriority] = useState(TASKS_TYPE.common);
 
   const theme = useContext(ThemeContext);
 
@@ -35,7 +36,7 @@ const PopUp = ({ addItem, className, handleClose, isShow }) => {
 
   const clearFields = () => {
     setDescription("");
-    setPriority("common");
+    setPriority(TASKS_TYPE.common);
   };
 
   return (
@@ -61,9 +62,9 @@ const PopUp = ({ addItem, className, handleClose, isShow }) => {
           value={priority}
           onChange={(event) => handleChangePriority(event)}
         >
-          <option value="common">Обычная</option>
-          <option value="important">Важная</option>
-          <option value="hot">Срочная</option>
+          <option value={TASKS_TYPE.common}>Обычная</option>
+          <option value={TASKS_TYPE.important}>Важная</option>
+          <option value={TASKS_TYPE.hot}>Срочная</option>
         </select>
       </div>
       <div className={styles.modalButton}>

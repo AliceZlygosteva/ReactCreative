@@ -2,10 +2,12 @@ import React from "react";
 
 import Loader from "../Loader/Loader";
 
-function withLoader(WrappedComponent, props, isLoading) {
+function withLoader(WrappedComponent) {
   return class extends React.Component {
     render() {
-      return <>{isLoading ? <Loader /> : <WrappedComponent {...props} />}</>
+      const { isLoading } = this.props;
+      
+      return <>{isLoading ? <Loader /> : <WrappedComponent {...this.props} />}</>
     }
   };
 }

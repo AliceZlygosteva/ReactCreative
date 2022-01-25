@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import ItemToDo from "../ItemToDo/ItemToDo";
+import { FILTER_TYPES } from "../../constants";
 
 import styles from "./ToDoList.module.scss";
 
@@ -10,10 +11,10 @@ const ToDoList = (props) => {
   
   const filteringTasks = (filterType, arrTasks) => {
     switch (filterType) {
-      case "done":
+      case FILTER_TYPES.done:
         return arrTasks.filter((task) => task.isCompleted);
 
-      case "current":
+      case FILTER_TYPES.current:
         return arrTasks.filter((task) => !task.isCompleted);
 
       default:

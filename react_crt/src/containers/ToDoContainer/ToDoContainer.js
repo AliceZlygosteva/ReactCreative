@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import PopUp from "../../components/PopUp";
 import Button from "../../components/UI/Button";
@@ -6,21 +6,27 @@ import ToDoList from "../../components/ToDoList";
 
 import withLoader from "../../components/HOC/withLoader";
 
+import { FILTER_TYPES } from "../../constants";
+
 import styles from "./ToDoContainer.module.scss";
+
+const ListWithLoader = withLoader(ToDoList);
 
 const ToDoContainer = () => {
   const [list, setList] = useState([]);
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState(FILTER_TYPES.all);
   const [isShow, setIsShow] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const listFromStorage = JSON.parse(localStorage.getItem("todoList")) || [];
 
-    setTimeout(() => {
+    const getListTimeout = setTimeout(() => {
       setList(listFromStorage);
       setIsLoading(false);
     }, 2000);
+
+    return () => clearTimeout(getListTimeout);
   }, []);
 
   const saveList = (newList) => {
@@ -38,19 +44,25 @@ const ToDoContainer = () => {
     return [...list, { id, description, priority, isCompleted: false }];
   };
 
-  const changeStatus = (status, id) => {
-    const newList = list.map((item) =>
-      item.id === id ? { ...item, isCompleted: status } : item
-    );
+  const changeStatus = useCallback(
+    (status, id) => {
+      const newList = list.map((item) =>
+        item.id === id ? { ...item, isCompleted: status } : item
+      );
 
-    saveList(newList);
-  };
+      saveList(newList);
+    },
+    [list]
+  );
 
-  const deleteItem = (id) => {
-    const newList = list.filter((item) => item.id !== id);
+  const deleteItem = useCallback(
+    (id) => {
+      const newList = list.filter((item) => item.id !== id);
 
-    saveList(newList);
-  };
+      saveList(newList);
+    },
+    [list]
+  );
 
   const handleChangeFilter = (event) => setFilter(event.target.value);
 
@@ -68,17 +80,6 @@ const ToDoContainer = () => {
     });
   };
 
-  const ListWithLoader = withLoader(
-    ToDoList,
-    {
-      list,
-      filter,
-      changeStatus,
-      deleteItem,
-    },
-    isLoading
-  );
-
   return (
     <div className={styles.container}>
       <div className={styles.select}>
@@ -87,18 +88,20 @@ const ToDoContainer = () => {
           value={filter}
           onChange={(event) => handleChangeFilter(event)}
         >
-          <option value="all">Все задачи</option>
-          <option value="done">Выполненные</option>
-          <option value="current">Текущие</option>
+          <option value={FILTER_TYPES.all}>Все задачи</option>
+          <option value={FILTER_TYPES.done}>Выполненные</option>
+          <option value={FILTER_TYPES.current}>Текущие</option>
         </select>
         <div className={styles.selectArrow}></div>
       </div>
-      <ListWithLoader />
-      <Button
-        color="green"
-        size="lg"
-        onClick={() => setIsShow(true)}
-      >
+      <ListWithLoader
+        isLoading={isLoading}
+        list={list}
+        filter={filter}
+        changeStatus={changeStatus}
+        deleteItem={deleteItem}
+      />
+      <Button color="green" size="lg" onClick={() => setIsShow(true)}>
         Add a new todo
       </Button>
       <PopUp
