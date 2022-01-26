@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
 
 import Header from "./components/Header";
-import ToDoContainer from "./containers/ToDoContainer";
 
 import { ThemeContext } from "./context";
 import { APP_THEMES } from "./constants";
@@ -12,18 +12,16 @@ function App() {
   const [theme, setTheme] = useState(APP_THEMES.dark);
 
   const handleSetTheme = () => {
-    const newTheme = theme => theme === APP_THEMES.dark
-    ? APP_THEMES.light
-    : APP_THEMES.dark;
+    const newTheme = (theme) =>
+      theme === APP_THEMES.dark ? APP_THEMES.light : APP_THEMES.dark;
 
     setTheme(newTheme);
-  }
+  };
 
   return (
     <ThemeContext.Provider value={{ theme, handleSetTheme }}>
       <Header />
-      <h2 className="title">TO-DO LIST</h2>
-      <ToDoContainer />
+      <Outlet />
     </ThemeContext.Provider>
   );
 }

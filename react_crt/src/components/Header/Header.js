@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import cn from "classnames";
 
 import Button from "../UI/Button";
@@ -17,7 +18,9 @@ class Header extends React.Component {
           [styles[`header--${theme}`]]: theme,
         })}
       >
-        <h2 className={styles.headerTitle}>My React App</h2>
+        <Link to="/" className={styles.headerWrapper}>
+          <h2 className={styles.headerTitle}>My React App</h2>
+        </Link>
         <Button
           buttonType="switch"
           size="s"

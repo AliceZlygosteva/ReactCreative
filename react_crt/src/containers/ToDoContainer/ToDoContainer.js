@@ -82,6 +82,7 @@ const ToDoContainer = () => {
 
   return (
     <div className={styles.container}>
+      <h2 className={styles.title}>TO-DO LIST</h2>
       <div className={styles.select}>
         <select
           size="1"
