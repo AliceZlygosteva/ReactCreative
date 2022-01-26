@@ -24,11 +24,19 @@
     }
   }
 
+  .headerWrapper {
+    text-decoration: none;
+  }
+
   h2 {
     font-size: 36px;
     font-family: 'Times New Roman', Times, serif;
     font-weight: 400;
     font-style: normal;
     color: #c0b2b5;
+
+    &:hover {
+      color: #6a1d2f;
+    }
   }
 }
