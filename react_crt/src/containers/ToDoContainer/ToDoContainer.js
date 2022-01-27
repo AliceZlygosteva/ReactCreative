@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { observer } from "mobx-react-lite";
+import Todo from "../../store/Todo";
 
 import PopUp from "../../components/PopUp";
 import Button from "../../components/UI/Button";
@@ -12,73 +14,23 @@ import styles from "./ToDoContainer.module.scss";
 
 const ListWithLoader = withLoader(ToDoList);
 
-const ToDoContainer = () => {
-  const [list, setList] = useState([]);
+const ToDoContainer = observer(() => {
+  const list = Todo.list;
   const [filter, setFilter] = useState(FILTER_TYPES.all);
   const [isShow, setIsShow] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const listFromStorage = JSON.parse(localStorage.getItem("todoList")) || [];
-
-    const getListTimeout = setTimeout(() => {
-      setList(listFromStorage);
-      setIsLoading(false);
+    const listTimeout = setTimeout(() => {
+      Todo.setIsLoading(false);
     }, 2000);
 
-    return () => clearTimeout(getListTimeout);
+    return () => clearTimeout(listTimeout);
   }, []);
 
-  const saveList = (newList) => {
-    setList(newList);
-    localStorage.setItem("todoList", JSON.stringify(newList));
-  };
-
-  const createNewItem = (prevList, { description, priority, id }) => {
-    const hasMatchDescription = prevList.some(
-      (item) => item.description === description
-    );
-
-    if (hasMatchDescription) return alert("Задача уже существует");
-
-    return [...list, { id, description, priority, isCompleted: false }];
-  };
-
-  const changeStatus = useCallback(
-    (status, id) => {
-      const newList = list.map((item) =>
-        item.id === id ? { ...item, isCompleted: status } : item
-      );
-
-      saveList(newList);
-    },
-    [list]
-  );
-
-  const deleteItem = useCallback(
-    (id) => {
-      const newList = list.filter((item) => item.id !== id);
-
-      saveList(newList);
-    },
-    [list]
-  );
-
+  const handleAddTodo = (todoData) => Todo.addTodo(todoData);
   const handleChangeFilter = (event) => setFilter(event.target.value);
-
-  const handleAddItem = ({ description, priority, id }) => {
-    setList((prevList) => {
-      const newToDo = createNewItem(prevList, {
-        description,
-        priority,
-        id,
-      });
-
-      localStorage.setItem("todoList", JSON.stringify(newToDo));
-
-      return newToDo;
-    });
-  };
+  const handleChangeStatus = (id, status) => Todo.changeStatus(id, status);
+  const handleDeleteTodo = (id) => Todo.deleteTodo(id);
 
   return (
     <div className={styles.container}>
@@ -96,11 +48,11 @@ const ToDoContainer = () => {
         <div className={styles.selectArrow}></div>
       </div>
       <ListWithLoader
-        isLoading={isLoading}
+        isLoading={Todo.isLoading}
         list={list}
         filter={filter}
-        changeStatus={changeStatus}
-        deleteItem={deleteItem}
+        changeStatus={handleChangeStatus}
+        deleteItem={handleDeleteTodo}
       />
       <Button color="green" size="lg" onClick={() => setIsShow(true)}>
         Add a new todo
@@ -108,10 +60,10 @@ const ToDoContainer = () => {
       <PopUp
         isShow={isShow}
         handleClose={() => setIsShow(false)}
-        addItem={handleAddItem}
+        addItem={handleAddTodo}
       />
     </div>
   );
-};
+});
 
 export default ToDoContainer;
