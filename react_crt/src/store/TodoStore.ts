@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { IAddTodo, IItemTodo } from "../types";
 
-class Todo {
+class TodoStore {
   list = JSON.parse(localStorage.getItem("todoList") || "[]");
   isLoading = true;
 
@@ -51,4 +51,4 @@ class Todo {
   }
 }
 
-export default new Todo();
+export default new TodoStore();
