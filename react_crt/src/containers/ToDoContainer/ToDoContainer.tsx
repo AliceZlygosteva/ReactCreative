@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import Todo from "../../store/Todo";
 
@@ -10,13 +10,15 @@ import withLoader from "../../components/HOC/withLoader";
 
 import { FILTER_TYPES } from "../../constants";
 
+import { IAddTodo, TFilterTypesValues } from "../../types";
+
 import styles from "./ToDoContainer.module.scss";
 
 const ListWithLoader = withLoader(ToDoList);
 
 const ToDoContainer = observer(() => {
   const list = Todo.list;
-  const [filter, setFilter] = useState(FILTER_TYPES.all);
+  const [filter, setFilter] = useState<TFilterTypesValues>(FILTER_TYPES.all);
   const [isShow, setIsShow] = useState(false);
 
   useEffect(() => {
@@ -27,17 +29,19 @@ const ToDoContainer = observer(() => {
     return () => clearTimeout(listTimeout);
   }, []);
 
-  const handleAddTodo = (todoData) => Todo.addTodo(todoData);
-  const handleChangeFilter = (event) => setFilter(event.target.value);
-  const handleChangeStatus = (id, status) => Todo.changeStatus(id, status);
-  const handleDeleteTodo = (id) => Todo.deleteTodo(id);
+  const handleAddTodo = (todoData: IAddTodo) => Todo.addTodo(todoData);
+  const handleChangeFilter = (event: ChangeEvent<HTMLSelectElement>) =>
+    setFilter(event.target.value as TFilterTypesValues);
+  const handleChangeStatus = (id: string, status: boolean) =>
+    Todo.changeStatus(id, status);
+  const handleDeleteTodo = (id: string) => Todo.deleteTodo(id);
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>TO-DO LIST</h2>
       <div className={styles.select}>
         <select
-          size="1"
+          size={1}
           value={filter}
           onChange={(event) => handleChangeFilter(event)}
         >

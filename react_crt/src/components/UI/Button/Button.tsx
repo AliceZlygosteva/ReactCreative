@@ -1,6 +1,5 @@
 import React from "react";
 import cn from "classnames";
-import PropTypes from "prop-types";
 
 import {
   BUTTON_TYPES,
@@ -8,27 +7,28 @@ import {
   BUTTON_COLOR,
   BUTTON_THEMES,
 } from "./store";
+import { IButtonProps } from "./types";
 
 import styles from "./Button.module.scss";
 
 const Button = ({
+  buttonType = "default",
   children,
   className,
   color,
+  fullWidth,
   onClick,
   size = "m",
-  buttonType = "default",
-  type = "button",
-  fullWidth,
   theme,
-}) => {
+  type = "button",
+}: IButtonProps) => {
   const classNames = cn(styles.button, className, {
-    [styles[`button--color-${color}`]]: BUTTON_COLOR.includes(color),
+    [styles[`button--color-${color}`]]: color && BUTTON_COLOR.includes(color),
     [styles[`button--button-type-${buttonType}`]]:
       BUTTON_TYPES.includes(buttonType),
     [styles[`button--size-${size}`]]: BUTTON_SIZES.includes(size),
     [styles[`button--full-width`]]: fullWidth,
-    [styles[`button-theme-${theme}`]]: BUTTON_THEMES.includes(theme),
+    [styles[`button-theme-${theme}`]]: theme && BUTTON_THEMES.includes(theme),
   });
 
   return (
@@ -36,18 +36,6 @@ const Button = ({
       {children}
     </button>
   );
-};
-
-Button.propTypes = {
-  buttonType: PropTypes.oneOf(BUTTON_TYPES),
-  children: PropTypes.node,
-  className: PropTypes.string,
-  color: PropTypes.oneOf(BUTTON_COLOR),
-  fullWidth: PropTypes.bool,
-  onClick: PropTypes.func,
-  size: PropTypes.oneOf(BUTTON_SIZES),
-  theme: PropTypes.oneOf(BUTTON_THEMES),
-  type: PropTypes.string,
 };
 
 export default Button;
