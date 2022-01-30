@@ -20,7 +20,7 @@ const ItemToDo = ({
           <input
             type="checkbox"
             checked={isCompleted}
-            onChange={() => changeStatus(!isCompleted, id)}
+            onChange={() => changeStatus(id, !isCompleted)}
           ></input>
           <div className={styles.checkboxIndicator}></div>
         </label>
