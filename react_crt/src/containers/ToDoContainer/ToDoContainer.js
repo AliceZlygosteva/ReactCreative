@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-import Todo from "../../store/Todo";
+import TodoStore from "../../store/TodoStore";
 
 import PopUp from "../../components/PopUp";
 import Button from "../../components/UI/Button";
@@ -14,23 +14,23 @@ import styles from "./ToDoContainer.module.scss";
 
 const ListWithLoader = withLoader(ToDoList);
 
-const ToDoContainer = observer(() => {
-  const list = Todo.list;
+const ToDoContainer = () => {
+  const list = TodoStore.list;
   const [filter, setFilter] = useState(FILTER_TYPES.all);
   const [isShow, setIsShow] = useState(false);
 
   useEffect(() => {
     const listTimeout = setTimeout(() => {
-      Todo.setIsLoading(false);
+      TodoStore.setIsLoading(false);
     }, 2000);
 
     return () => clearTimeout(listTimeout);
   }, []);
 
-  const handleAddTodo = (todoData) => Todo.addTodo(todoData);
+  const handleAddTodo = (todoData) => TodoStore.addTodo(todoData);
   const handleChangeFilter = (event) => setFilter(event.target.value);
-  const handleChangeStatus = (id, status) => Todo.changeStatus(id, status);
-  const handleDeleteTodo = (id) => Todo.deleteTodo(id);
+  const handleChangeStatus = (id, status) => TodoStore.changeStatus(id, status);
+  const handleDeleteTodo = (id) => TodoStore.deleteTodo(id);
 
   return (
     <div className={styles.container}>
@@ -48,7 +48,7 @@ const ToDoContainer = observer(() => {
         <div className={styles.selectArrow}></div>
       </div>
       <ListWithLoader
-        isLoading={Todo.isLoading}
+        isLoading={TodoStore.isLoading}
         list={list}
         filter={filter}
         changeStatus={handleChangeStatus}
@@ -64,6 +64,6 @@ const ToDoContainer = observer(() => {
       />
     </div>
   );
-});
+};
 
-export default ToDoContainer;
+export default observer(ToDoContainer);
