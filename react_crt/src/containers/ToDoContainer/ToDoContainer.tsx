@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-import Todo from "../../store/Todo";
+import TodoStore from "../../store/TodoStore";
 
 import PopUp from "../../components/PopUp";
 import Button from "../../components/UI/Button";
@@ -16,25 +16,23 @@ import styles from "./ToDoContainer.module.scss";
 
 const ListWithLoader = withLoader(ToDoList);
 
-const ToDoContainer = observer(() => {
-  const list = Todo.list;
+const ToDoContainer = () => {
+  const list = TodoStore.list;
   const [filter, setFilter] = useState<TFilterTypesValues>(FILTER_TYPES.all);
   const [isShow, setIsShow] = useState(false);
 
   useEffect(() => {
     const listTimeout = setTimeout(() => {
-      Todo.setIsLoading(false);
+      TodoStore.setIsLoading(false);
     }, 2000);
 
     return () => clearTimeout(listTimeout);
   }, []);
 
-  const handleAddTodo = (todoData: IAddTodo) => Todo.addTodo(todoData);
-  const handleChangeFilter = (event: ChangeEvent<HTMLSelectElement>) =>
-    setFilter(event.target.value as TFilterTypesValues);
-  const handleChangeStatus = (id: string, status: boolean) =>
-    Todo.changeStatus(id, status);
-  const handleDeleteTodo = (id: string) => Todo.deleteTodo(id);
+  const handleAddTodo = (todoData: IAddTodo) => TodoStore.addTodo(todoData);
+  const handleChangeFilter = (event: ChangeEvent<HTMLSelectElement>) => setFilter(event.target.value as TFilterTypesValues);
+  const handleChangeStatus = (id: string, status: boolean) => TodoStore.changeStatus(id, status);
+  const handleDeleteTodo = (id: string) => TodoStore.deleteTodo(id);
 
   return (
     <div className={styles.container}>
@@ -52,7 +50,7 @@ const ToDoContainer = observer(() => {
         <div className={styles.selectArrow}></div>
       </div>
       <ListWithLoader
-        isLoading={Todo.isLoading}
+        isLoading={TodoStore.isLoading}
         list={list}
         filter={filter}
         changeStatus={handleChangeStatus}
@@ -68,6 +66,6 @@ const ToDoContainer = observer(() => {
       />
     </div>
   );
-});
+};
 
-export default ToDoContainer;
+export default observer(ToDoContainer);
