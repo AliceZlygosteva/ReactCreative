@@ -1,16 +1,17 @@
 import { makeAutoObservable } from "mobx";
+import { IAddTodo, IItemTodo } from "../types";
 
 class Todo {
-  list = JSON.parse(localStorage.getItem("todoList")) || [];
+  list = JSON.parse(localStorage.getItem("todoList") || "[]");
   isLoading = true;
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  addTodo({ id, description, priority }) {
+  addTodo({ id, description, priority }: IAddTodo) {
     const hasMatchDescription = this.list.some(
-      (item) => item.description === description
+      (item: IItemTodo) => item.description === description
     );
 
     if (hasMatchDescription) return alert("Задача уже существует");
@@ -29,23 +30,23 @@ class Todo {
     localStorage.setItem("todoList", JSON.stringify(newList));
   }
 
-  deleteTodo(id) {
-    const newList = this.list.filter((item) => item.id !== id);
+  deleteTodo(id: string) {
+    const newList = this.list.filter((item: IItemTodo) => item.id !== id);
 
     this.list = newList;
     localStorage.setItem("todoList", JSON.stringify(newList));
   }
 
-  changeStatus(id, status) {
-    const newList = this.list.map((item) =>
-    item.id === id ? { ...item, isCompleted: status } : item
-  );
+  changeStatus(id: string, status: boolean) {
+    const newList = this.list.map((item: IItemTodo) =>
+      item.id === id ? { ...item, isCompleted: status } : item
+    );
 
-  this.list = newList;
-  localStorage.setItem("todoList", JSON.stringify(newList));
+    this.list = newList;
+    localStorage.setItem("todoList", JSON.stringify(newList));
   }
 
-  setIsLoading(isLoading) {
+  setIsLoading(isLoading: boolean) {
     this.isLoading = isLoading;
   }
 }
