@@ -33,6 +33,7 @@ export const todoSlice = createSlice({
       state.list = newList;
       localStorage.setItem("todoList", JSON.stringify(newList));
     },
+
     deleteTodo(state, action) {
       const { payload: id } = action;
 
@@ -41,6 +42,7 @@ export const todoSlice = createSlice({
       state.list = newList;
       localStorage.setItem("todoList", JSON.stringify(newList));
     },
+
     changeStatus(state, action) {
       const {
         payload: { id, status },
@@ -53,6 +55,7 @@ export const todoSlice = createSlice({
       state.list = newList;
       localStorage.setItem("todoList", JSON.stringify(newList));
     },
+    
     setIsLoading(state, action) {
       const {
         payload: { isLoading },
