@@ -1,18 +1,18 @@
 import React from "react";
 import cn from "classnames";
-import PropTypes from "prop-types";
 
 import Button from "../UI/Button";
 
-import { TASKS_VALUE } from "./store";
+import { TASKS_PRIORITY } from "../../constants";
+import { IItemToDoProps } from "./types";
 
 import styles from "./ItemToDo.module.scss";
 
 const ItemToDo = ({
-  item: { id, isCompleted, description, priority },
   changeStatus,
   deleteItem,
-}) => {
+  item: { id, isCompleted, description, priority },
+}: IItemToDoProps) => {
   return (
     <div className={cn(styles.itemContainer, styles[priority])}>
       <div className={styles.item}>
@@ -20,12 +20,12 @@ const ItemToDo = ({
           <input
             type="checkbox"
             checked={isCompleted}
-            onChange={() => changeStatus(!isCompleted, id)}
+            onChange={() => changeStatus(id, !isCompleted)}
           ></input>
           <div className={styles.checkboxIndicator}></div>
         </label>
         <span>{description}</span>
-        <div className={styles.priority}>{TASKS_VALUE[priority]}</div>
+        <div className={styles.priority}>{TASKS_PRIORITY[priority].title}</div>
         <Button
           buttonType="delete"
           color="red"
@@ -37,12 +37,6 @@ const ItemToDo = ({
       </div>
     </div>
   );
-};
-
-ItemToDo.propTypes = {
-  changeStatus: PropTypes.func,
-  deleteItem: PropTypes.func,
-  item: PropTypes.object,
 };
 
 export default ItemToDo;

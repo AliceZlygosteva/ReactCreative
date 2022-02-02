@@ -1,24 +1,33 @@
-import React, { useContext, useState } from "react";
+import React, { ChangeEvent, useContext, useState } from "react";
 import cn from "classnames";
 import { v4 as uuidv4 } from "uuid";
-import PropTypes from "prop-types";
+
+import { IPopUp } from "./types";
+import { IThemeContext } from "../../types";
 
 import Button from "../UI/Button";
 
 import { ThemeContext } from "../../context/index";
-import { TASKS_TYPE } from "../../constants";
+import { TASKS_PRIORITY } from "../../constants";
 
 import styles from "./PopUp.module.scss";
 
-const PopUp = ({ addItem, className, handleClose, isShow }) => {
-  const [description, setDescription] = useState("");
-  const [priority, setPriority] = useState(TASKS_TYPE.common);
+type TTaskPriority = keyof typeof TASKS_PRIORITY;
+type TTaskPriorityValues = typeof TASKS_PRIORITY[TTaskPriority]["value"];
 
-  const theme = useContext(ThemeContext);
+const PopUp = ({ addItem, className, handleClose, isShow }: IPopUp) => {
+  const [description, setDescription] = useState<string>("");
+  const [priority, setPriority] = useState<TTaskPriorityValues>(
+    TASKS_PRIORITY.common.value
+  );
 
-  const handleChangeDescription = (event) => setDescription(event.target.value);
+  const theme = useContext<IThemeContext>(ThemeContext);
 
-  const handleChangePriority = (event) => setPriority(event.target.value);
+  const handleChangeDescription = (e: ChangeEvent<HTMLInputElement>) =>
+    setDescription(e.target.value);
+
+  const handleChangePriority = (e: ChangeEvent<HTMLSelectElement>) =>
+    setPriority(e.target.value as TTaskPriorityValues);
 
   const handleClosePopup = () => {
     clearFields();
@@ -36,7 +45,7 @@ const PopUp = ({ addItem, className, handleClose, isShow }) => {
 
   const clearFields = () => {
     setDescription("");
-    setPriority(TASKS_TYPE.common);
+    setPriority(TASKS_PRIORITY.common.value);
   };
 
   return (
@@ -51,20 +60,20 @@ const PopUp = ({ addItem, className, handleClose, isShow }) => {
         <input
           type="text"
           placeholder="Введите текст задачи"
-          size="35"
+          size={35}
           value={description}
           onChange={(event) => handleChangeDescription(event)}
         />
       </div>
       <div className={styles.modalSelect}>
         <select
-          size="1"
+          size={1}
           value={priority}
           onChange={(event) => handleChangePriority(event)}
         >
-          <option value={TASKS_TYPE.common}>Обычная</option>
-          <option value={TASKS_TYPE.important}>Важная</option>
-          <option value={TASKS_TYPE.hot}>Срочная</option>
+          <option value={TASKS_PRIORITY.common.value}>Обычная</option>
+          <option value={TASKS_PRIORITY.important.value}>Важная</option>
+          <option value={TASKS_PRIORITY.hot.value}>Срочная</option>
         </select>
       </div>
       <div className={styles.modalButton}>
@@ -87,13 +96,6 @@ const PopUp = ({ addItem, className, handleClose, isShow }) => {
       </div>
     </div>
   );
-};
-
-PopUp.propTypes = {
-  addItem: PropTypes.func,
-  className: PropTypes.string,
-  handleClose: PropTypes.func,
-  isShow: PropTypes.bool,
 };
 
 export default PopUp;
