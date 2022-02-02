@@ -7,7 +7,10 @@ import {
 } from "./store";
 
 type TButtonColor = typeof BUTTON_COLOR[number];
-type TButtonSizes = typeof BUTTON_SIZES[number];
+
+type TButtonSizesKeys = keyof typeof BUTTON_SIZES;
+type TButtonSizesValues = typeof BUTTON_SIZES[TButtonSizesKeys];
+
 type TButtonThemes = typeof BUTTON_THEMES[number];
 type TButtonTypes = typeof BUTTON_TYPES[number];
 
@@ -18,7 +21,7 @@ export interface IButtonProps {
   color?: TButtonColor;
   fullWidth?: boolean;
   onClick?: () => void;
-  size?: TButtonSizes;
+  size?: TButtonSizesValues;
   theme?: TButtonThemes;
   type?: 'button' | 'submit' | 'reset';
 }

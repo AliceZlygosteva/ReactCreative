@@ -3,6 +3,7 @@ import cn from "classnames";
 import { v4 as uuidv4 } from "uuid";
 
 import { IPopUp } from "./types";
+import { IThemeContext } from "../../types";
 
 import Button from "../UI/Button";
 
@@ -15,12 +16,12 @@ type TTaskPriority = keyof typeof TASKS_PRIORITY;
 type TTaskPriorityValues = typeof TASKS_PRIORITY[TTaskPriority]["value"];
 
 const PopUp = ({ addItem, className, handleClose, isShow }: IPopUp) => {
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState<string>("");
   const [priority, setPriority] = useState<TTaskPriorityValues>(
     TASKS_PRIORITY.common.value
   );
 
-  const theme = useContext(ThemeContext);
+  const theme = useContext<IThemeContext>(ThemeContext);
 
   const handleChangeDescription = (e: ChangeEvent<HTMLInputElement>) =>
     setDescription(e.target.value);

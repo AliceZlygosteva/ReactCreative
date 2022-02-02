@@ -8,6 +8,12 @@ export type TFilterTypesValues = typeof FILTER_TYPES[TFilterTypesKeys];
 
 export type TPriority = keyof typeof TASKS_PRIORITY;
 
+export interface IAddTodo {
+  id: string;
+  description: string;
+  priority: TPriority;
+};
+
 export interface IItemTodo {
   id: string;
   isCompleted: boolean;
@@ -15,8 +21,7 @@ export interface IItemTodo {
   priority: TPriority;
 };
 
-export interface IAddTodo {
-  id: string;
-  description: string;
-  priority: TPriority;
-};
+export interface IThemeContext {
+  theme: TThemeValues;
+  handleSetTheme: () => void;
+}
