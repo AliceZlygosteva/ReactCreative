@@ -18,7 +18,7 @@ const Button = ({
   color,
   fullWidth,
   onClick,
-  size = "m",
+  size = BUTTON_SIZES.m,
   theme,
   type = "button",
 }: IButtonProps) => {
@@ -26,7 +26,8 @@ const Button = ({
     [styles[`button--color-${color}`]]: color && BUTTON_COLOR.includes(color),
     [styles[`button--button-type-${buttonType}`]]:
       BUTTON_TYPES.includes(buttonType),
-    [styles[`button--size-${size}`]]: BUTTON_SIZES.includes(size),
+    [styles[`button--size-${BUTTON_SIZES[size]}`]]:
+      size && Object.keys(BUTTON_SIZES).includes(size),
     [styles[`button--full-width`]]: fullWidth,
     [styles[`button-theme-${theme}`]]: theme && BUTTON_THEMES.includes(theme),
   });
